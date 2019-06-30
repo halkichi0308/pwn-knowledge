@@ -99,8 +99,16 @@ int main(){
 $readelf -s test|grep greeting
     54: 00002008     4 OBJECT  GLOBAL DEFAULT   23 greeting
 ```
-* stringsで気になったwordをgrepしたら追加で情報が出るかも。
+`stringsで気になったwordをgrepしたら追加で情報が出るかも。`
 
+
+* .data セクションの中身を調べる  
+
+stringsで`cat flag.txt`の様な文字列を見つけたらここを参照すると文字列などがあるかも。  
+system()が呼べる環境では利用できる。
+```
+objdump -M intel -s <file>
+```
 ___
 ## gdb (gdb-peda)コマンド ##
 * まずはgdb起動
@@ -214,6 +222,7 @@ add-auto-load-safe-path /usr/local/go/src/runtime/runtime-gdb.py
 
 * checksecもできる
 ```
+
 ```
 ___
 ## radare2の使い方 ##
@@ -248,6 +257,11 @@ mov    ebp,esp
 #### 汎用レジスタ ####
 
 [参考](http://herumi.in.coocan.jp/prog/x64.html)
+
+x64では引数にレジスタが利用される。  
+以下は呼び出される順番とその用途
+
+
 レジスタ|用途|呼び出された側(callee)での保存の必要性
 :-:|:-:|:-:
 rax|戻り値/利用したSSEレジスタの数|不要
@@ -456,4 +470,15 @@ Mintのネットワークを固定にするとwifiのみに接続した時、切
 ### ropgagdet ###
 ```
 wget https://github.com/downloads/0vercl0k/rp/rp-lin-x86
+```
+
+### x64のエンディアン ###
+* 64bit単位でエンディアンがかかる。  
+
+```
+0000000000401800 <printf@plt>:
+```
+↓
+```
+\x00\x18\x40\x00\x00\x00\x00\x00,
 ```
